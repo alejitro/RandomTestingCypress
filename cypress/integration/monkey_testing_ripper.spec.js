@@ -31,7 +31,7 @@ function randomClick(monkeysLeft) {
 }*/
 
 describe('Los estudiantes random Events', function() {
-    it('visits los estudiantes and survives monkeys', function() {
+    it('visits los estudiantes and survives random event monkeys', function() {
         cy.visit('https://losestudiantes.co');
         cy.contains('Cerrar').click();
         cy.wait(1000);
@@ -60,6 +60,7 @@ function randomEvents(eventsLeft) {
                       cy.wrap(randomLink).click({force: true});
                       eventsLeft = eventsLeft - 1;
                       console.log("EventosFaltantes: ",eventsLeft);
+                      return randomEvents(eventsLeft);
                   }
                 }
                 return randomEvents(eventsLeft);
@@ -67,8 +68,6 @@ function randomEvents(eventsLeft) {
             });
             break;
             case 1:
-              cy.contains('Ingresar').click()
-              cy.contains('Registrarse').click()
               cy.get('input').then($inputs => {
                   if($inputs.length>0){
                     var randomInput = $inputs.get(getRandomInt(0, $inputs.length));
@@ -79,6 +78,7 @@ function randomEvents(eventsLeft) {
                         //cy.contains('Cancelar').click();
                         eventsLeft = eventsLeft - 1;
                         console.log("EventosFaltantes: ",eventsLeft);
+                        return randomEvents(eventsLeft);
                     }
                   }
                   //setTimeout(randomEvent, 1000, eventsLeft);
@@ -91,9 +91,10 @@ function randomEvents(eventsLeft) {
                       var randomSelect = $selects.get(getRandomInt(0, $selects.length));
                       console.log("variableRandomSelect: ",randomSelect);
                       if(!Cypress.dom.isHidden(randomSelect)) {
-                          cy.wrap(randomSelect).eq(0).then(element => cy.wrap(randomSelect).select(element.val()));
+                          cy.wrap(randomSelect).eq(0).then(element => cy.wrap(randomSelect).select(element.val(), {force:true}));
                           eventsLeft = eventsLeft - 1;
                           console.log("EventosFaltantes: ",eventsLeft);
+                          return randomEvents(eventsLeft);
                       }
                     }
                     return randomEvents(eventsLeft);
@@ -109,9 +110,9 @@ function randomEvents(eventsLeft) {
                           cy.wrap(randomButtons).click({force: true});
                           eventsLeft = eventsLeft - 1;
                           console.log("EventosFaltantes: ",eventsLeft);
+                          return randomEvents(eventsLeft);
                       }
                     }
-                    //setTimeout(randomEvent, 1000, eventsLeft);
                     return randomEvents(eventsLeft);
                 });
                 break;
